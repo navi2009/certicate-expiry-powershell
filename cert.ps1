@@ -26,3 +26,28 @@ $result+=New-Object -TypeName PSObject -Property ([ordered]@{
  
 }
 $result | Out-File "C:\output.TXT"
+
+
+$fromaddress = "donotreply@test.net" 
+$toaddress = "test@test.com"
+#$bccaddress = "test@test.com" 
+#$CCaddress = "test1@test.com" 
+$Subject = "ACtion Required" 
+$body = get-content "c:\server.txt "
+$attachment = "C:\output.txt" 
+$smtpserver = "smtp@test.com" 
+ 
+#################################### 
+ 
+$message = new-object System.Net.Mail.MailMessage 
+$message.From = $fromaddress 
+$message.To.Add($toaddress) 
+$message.CC.Add($CCaddress) 
+$message.Bcc.Add($bccaddress) 
+$message.IsBodyHtml = $True 
+$message.Subject = $Subject 
+$attach = new-object Net.Mail.Attachment($attachment) 
+$message.Attachments.Add($attach) 
+$message.body = $body 
+$smtp = new-object Net.Mail.SmtpClient($smtpserver) 
+$smtp.Send($message) 
